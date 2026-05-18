@@ -9,6 +9,18 @@
 - Use generics for reusable, type-safe functions
 - Validate runtime data with Zod schemas
 
+## Setup
+
+1. **Fork** this repository and **clone** your fork
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+3. Verify TypeScript is working:
+   ```bash
+   pnpm check
+   ```
+
 ## Exercise Instructions
 
 ### Convert JavaScript to TypeScript
