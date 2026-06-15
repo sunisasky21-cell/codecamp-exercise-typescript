@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// Zod Schema for Runtime Validation
 export const UserSchema = z.object({
   id: z.union([z.string(), z.number()]),
   name: z.string(),
@@ -7,7 +8,7 @@ export const UserSchema = z.object({
   role: z.string().optional(),
   skills: z.array(z.string()).optional(),
   joinedAt: z.date().optional(),
-  department: z.string(), // 👈 ใส่กลับเข้ามาตรงๆ ตามที่โจทย์ต้องการ
+  department: z.string(),
 });
 
 export const ProjectSchema = z.object({
@@ -20,9 +21,11 @@ export const ProjectSchema = z.object({
   createdAt: z.date(),
 });
 
-export type User = z.infer<typeof UserSchema>;
-export type Project = z.infer<typeof ProjectSchema>;
+// Module Objective: Define explicit Interfaces matching the schema
+export interface User extends z.infer<typeof UserSchema> {}
+export interface Project extends z.infer<typeof ProjectSchema> {}
 
+// Mock Data
 export const user: User = {
   id: 1,
   name: "Alice Johnson",
@@ -30,7 +33,7 @@ export const user: User = {
   role: "developer",
   skills: ["TypeScript", "React", "Node.js"],
   joinedAt: new Date("2026-01-15"),
-  department: "Engineering", // 👈 ใส่แผนกให้ Alice Johnson ด้วยเพื่อให้ตรงกับ Schema
+  department: "Engineering",
 };
 
 export const project: Project = {

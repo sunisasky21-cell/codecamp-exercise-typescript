@@ -15,8 +15,8 @@ export function getUserNames(users: ReadonlyArray<User>): string[] {
   return users.map((u) => u.name);
 }
 
-export function getEngineers(users: ReadonlyArray<User>): User[] {
-  // ดึง u.department ได้เลย ไม่ต้องใช้ as any แล้ว ปลอดภัย 100%
+// Fixed: Return ReadonlyArray to match functional immutability expectations
+export function getEngineers(users: ReadonlyArray<User>): ReadonlyArray<User> {
   return users.filter((u) => u.department === "Engineering");
 }
 
@@ -24,9 +24,10 @@ export function findUser(users: ReadonlyArray<User>, id: number): User | undefin
   return users.find((u) => Number(u.id) === id);
 }
 
+// Fixed: Resolved reduce initial value and typing issues strictly
 export function countByDepartment(users: ReadonlyArray<User>): Record<string, number> {
-  return users.reduce((acc: Record<string, number>, user: User) => {
-    const dept = user.department; // 👈 ดึงตรงๆ สวยงามตาม Best Practice
+  return users.reduce<Record<string, number>>((acc, currUser) => {
+    const dept = currUser.department;
     acc[dept] = (acc[dept] || 0) + 1;
     return acc;
   }, {});
