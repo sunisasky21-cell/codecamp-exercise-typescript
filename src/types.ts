@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// 1. กำหนด Zod Schema สำหรับตรวจสอบข้อมูลตอน Runtime
 export const UserSchema = z.object({
   id: z.union([z.string(), z.number()]),
   name: z.string(),
@@ -8,23 +7,22 @@ export const UserSchema = z.object({
   role: z.string().optional(),
   skills: z.array(z.string()).optional(),
   joinedAt: z.date().optional(),
+  department: z.string(), // 👈 ใส่กลับเข้ามาตรงๆ ตามที่โจทย์ต้องการ
 });
 
 export const ProjectSchema = z.object({
   id: z.union([z.string(), z.number()]),
   title: z.string(),
   description: z.string(),
-  owner: UserSchema, // ใช้ UserSchema ตรวจสอบเจ้าของโปรเจกต์ (แก้ปัญหา Mismatch)
+  owner: UserSchema,
   status: z.enum(["pending", "in-progress", "completed"]),
   tags: z.array(z.string()),
   createdAt: z.date(),
 });
 
-// 2. สกัด Type ออกมาจาก Schema เพื่อใช้ในระบบ TypeScript (Compile time)
 export type User = z.infer<typeof UserSchema>;
 export type Project = z.infer<typeof ProjectSchema>;
 
-// --- ข้อมูลดิบสำหรับส่งออก (เก็บบทเรียนเดิมไว้ครบถ้วน) ---
 export const user: User = {
   id: 1,
   name: "Alice Johnson",
@@ -32,13 +30,14 @@ export const user: User = {
   role: "developer",
   skills: ["TypeScript", "React", "Node.js"],
   joinedAt: new Date("2026-01-15"),
+  department: "Engineering", // 👈 ใส่แผนกให้ Alice Johnson ด้วยเพื่อให้ตรงกับ Schema
 };
 
 export const project: Project = {
   id: 1,
   title: "Portfolio Website",
   description: "A residential portfolio built with HTML, CSS, and JavaScript",
-  owner: user, // จิ้มไปที่ตัวแปร user ด้านบนตรงๆ ข้อมูล Type จะตรงกันเป๊ะ
+  owner: user,
   status: "in-progress",
   tags: ["frontend", "portfolio"],
   createdAt: new Date("2026-03-01"),
